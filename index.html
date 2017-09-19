@@ -1,0 +1,230 @@
+<html>
+<head>
+<title>Mixed marker example with Three.js</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+<style>
+html,body {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	text-align: center;
+	overflow-x: hidden;
+}
+.portrait canvas {
+	transform-origin: 0 0;
+	transform: rotate(-90deg) translateX(-100%);
+}
+.desktop canvas {
+ 	transform: scale(-1, 1);
+}
+</style>
+</head>
+<body>
+
+<!-- <h1>Mixed marker example with Three.js</h1>
+<p>On Chrome on Android, tap the screen to start playing video stream.</p>
+<p>Show <a href="https://github.com/artoolkit/artoolkit5/blob/master/doc/patterns/Matrix%20code%203x3%20(72dpi)/5.png">3x3 marker id 5</a>, <a href="https://github.com/artoolkit/artoolkit5/blob/master/doc/patterns/Matrix%20code%203x3%20(72dpi)/20.png">3x3 marker id 20</a>, <a href="https://github.com/artoolkit/artoolkit5/blob/master/doc/patterns/Hiro%20pattern.pdf">Hiro pattern</a> and <a href="https://github.com/artoolkit/artoolkit5/blob/master/doc/patterns/Kanji%20pattern.pdf">Kanji pattern</a> to camera to display a colorful objects on top of them. Tap the objects to spin them.
+ -->
+<!-- <p>&larr; <a href="index.html">Back to examples</a></p> -->
+
+<script async src="libs/artoolkit.min.js"></script>
+<script async src="libs/three.min.js"></script>
+<script async src="libs/artoolkit.three.js"></script>
+
+<script>
+
+window.ARThreeOnLoad = function() {
+
+	ARController.getUserMediaThreeScene({
+		maxARVideoSize: 1280,
+		cameraParam: 'Data/camera_para-iPhone 6 Plus rear 1280x720 1.0m.dat',
+
+		onSuccess: function(arScene, arController, arCamera) {
+
+			document.body.className = arController.orientation;
+
+			arController.setPatternDetectionMode(artoolkit.AR_TEMPLATE_MATCHING_MONO_AND_MATRIX);
+
+			var renderer = new THREE.WebGLRenderer({antialias: true});
+			if (arController.orientation === 'portrait') {
+				var w = (window.innerHeight / arController.videoHeight) * arController.videoWidth;
+				var h = window.innerHeight;
+				renderer.setSize(w, h);
+				// renderer.domElement.style.paddingBottom = (w-h) + 'px';
+			} else {
+				if (/Android|mobile|iPad|iPhone/i.test(navigator.userAgent)) {
+					renderer.setSize(window.innerWidth, (window.innerWidth / arController.videoWidth) * arController.videoHeight);
+				} else {
+					renderer.setSize(window.innerWidth, (window.innerWidth / arController.videoWidth) * arController.videoHeight);
+					document.body.className += ' desktop';
+				}
+			}
+
+			document.body.insertBefore(renderer.domElement, document.body.firstChild);
+
+			var rotationV = 0;
+			var rotationTarget = 0;
+
+			renderer.domElement.addEventListener('click', function(ev) {
+				ev.preventDefault();
+				rotationTarget += 1;
+			}, false);
+
+
+
+			var sphere = new THREE.Mesh(
+				new THREE.SphereGeometry(0.7, 1, 1),
+				new THREE.MeshPhongMaterial( { color: 0x686868, specular: 0x666666, emissive: 0xff0000, shininess: 10, opacity: 0.9, transparent: false } )
+
+			);
+			sphere.material.shading = THREE.FlatShading;
+			// sphere.position.z = 1;
+
+			var torus = new THREE.Mesh(
+				new THREE.SphereGeometry(0.7, 1, 1),
+				new THREE.MeshPhongMaterial( { color: 0x686868, specular: 0x666666, emissive: 0xff0000, shininess: 10, opacity: 0.9, transparent: false } )
+			);
+			torus.material.shading = THREE.FlatShading;
+			// torus.position.z = 1;
+
+			var cube = new THREE.Mesh(
+				new THREE.SphereGeometry(0.7, 1, 1),
+				new THREE.MeshPhongMaterial( { color: 0x686868, specular: 0x666666, emissive: 0xff0000, shininess: 10, opacity: 0.9, transparent: false } )
+
+			);
+			cube.material.shading = THREE.FlatShading;
+			// cube.position.z = 1;
+
+			var cube2 = new THREE.Mesh(
+				new THREE.SphereGeometry(0.7, 1, 1),
+				new THREE.MeshPhongMaterial( { color: 0x686868, specular: 0x666666, emissive: 0xff0000, shininess: 10, opacity: 0.9, transparent: false } )
+			);
+			cube2.material.shading = THREE.FlatShading;
+			// cube2.position.z = 1;
+
+			var icosahedron = new THREE.Mesh(
+				new THREE.SphereGeometry(0.7, 1, 1),
+				new THREE.MeshPhongMaterial( { color: 0x686868, specular: 0x666666, emissive: 0xff0000, shininess: 10, opacity: 0.9, transparent: false } )
+					);
+			icosahedron.material.shading = THREE.FlatShading;
+			// icosahedron.position.z = 1;
+
+			var icosahedron2 = new THREE.Mesh(
+				new THREE.SphereGeometry(0.7, 1, 1),
+				new THREE.MeshPhongMaterial( { color: 0x686868, specular: 0x666666, emissive: 0xff0000, shininess: 10, opacity: 0.9, transparent: false } )
+					);
+			icosahedron2.material.shading = THREE.FlatShading;
+
+
+			var icosahedron3 = new THREE.Mesh(
+				new THREE.SphereGeometry(0.7, 1, 1),
+				new THREE.MeshPhongMaterial( { color: 0x686868, specular: 0x666666, emissive: 0xff0000, shininess: 10, opacity: 0.9, transparent: false } )
+					);
+			icosahedron3.material.shading = THREE.FlatShading;
+			// icosahedron.position.z = 1;
+			// icosahedron.position.z = 1;
+
+// 	var geometry	= new THREE.TorusKnotGeometry(0.3,0.1,64,16);
+// var material = new THREE.MeshNormalMaterial();
+// 			var mesh = new THREE.Mesh( geometry, material );
+// 						mesh.position.x = Math.random() * 8000 - 4000;
+// 						mesh.position.y = Math.random() * 8000 - 4000;
+// 						mesh.position.z = Math.random() * 8000 - 4000;
+// 						mesh.rotation.x = Math.random() * 2 * Math.PI;
+// 						mesh.rotation.y = Math.random() * 2 * Math.PI;
+// 						mesh.scale.x = mesh.scale.y = mesh.scale.z = Math.random() * 50 + 100;
+
+
+
+			var markerRoot1 = arController.createThreeBarcodeMarker(5, 1);
+			markerRoot1.add(cube);
+			arScene.scene.add(markerRoot1);
+
+			var markerRoot2 = arController.createThreeBarcodeMarker(14, 1);
+			markerRoot2.add(cube2);
+			arScene.scene.add(markerRoot2);
+
+			var markerRoot3 = arController.createThreeBarcodeMarker(27, 1);
+			markerRoot3.add(sphere);
+			arScene.scene.add(markerRoot3);
+
+			var markerRoot4 = arController.createThreeBarcodeMarker(30, 1);
+			markerRoot4.add(icosahedron3);
+			arScene.scene.add(markerRoot4);
+
+			var markerRoot5 = arController.createThreeBarcodeMarker(31, 1);
+			markerRoot5.add(icosahedron2);
+			arScene.scene.add(markerRoot5);
+
+			var markerRoot6 = arController.createThreeBarcodeMarker(35, 1);
+			markerRoot6.add(torus);
+			arScene.scene.add(markerRoot6);
+
+			var markerRoot7 = arController.createThreeBarcodeMarker(37, 1);
+			markerRoot7.add(icosahedron);
+			arScene.scene.add(markerRoot7);
+
+			//Other barcodes: 45,46
+
+			// var markerRoot8 = arController.createThreeBarcodeMarker(6, 1);
+			// markerRoot8.add(torus);
+			// arScene.scene.add(markerRoot8);
+
+			// arController.loadMarker('Data/patt.hiro', function(markerId) {
+			// 	var markerRoot = arController.createThreeMarker(markerId, 3);
+			// 	markerRoot.add(sphere);
+			// 	arScene.scene.add(markerRoot);
+			// });
+			//
+			// arController.loadMarker('Data/patt.kanji', function(markerId) {
+			// 	var markerRoot = arController.createThreeMarker(markerId, 3);
+			// 	markerRoot.add(torus);
+			// 	arScene.scene.add(markerRoot);
+			// });
+
+
+
+			arScene.scene.add( new THREE.AmbientLight( 0x111111 ) );
+
+			var directionalLight = new THREE.DirectionalLight( 0xffffff, 0.125 );
+							directionalLight.position.x = Math.random() - 0.5;
+							directionalLight.position.y = Math.random() - 0.5;
+							directionalLight.position.z = Math.random() - 0.5;
+							directionalLight.position.normalize();
+							arScene.scene.add( directionalLight );
+
+							var pointLight = new THREE.PointLight( 0xffffff, 1 );
+				arScene.scene.add( pointLight );
+
+
+
+			var tick = function() {
+				arScene.process();
+
+				rotationV += (rotationTarget - sphere.rotation.z) * 0.05;
+				// sphere.rotation.z += rotationV;
+				// torus.rotation.y += rotationV;
+				// cube.rotation.z += rotationV;
+				// icosahedron.rotation.z += rotationV;
+				rotationV *= 0.8;
+
+				arScene.renderOn(renderer);
+				requestAnimationFrame(tick);
+			};
+
+			tick();
+
+		}
+	});
+
+	delete window.ARThreeOnLoad;
+
+};
+
+if (window.ARController && ARController.getUserMediaThreeScene) {
+	ARThreeOnLoad();
+}
+</script>
+
+</body>
+</html>
